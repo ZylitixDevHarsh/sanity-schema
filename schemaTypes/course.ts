@@ -72,6 +72,21 @@ export const course = defineType({
       initialValue: 'beginner',
     }),
     defineField({
+      name: 'instructorName',
+      title: 'Instructor name',
+      type: 'string',
+      group: 'catalogue',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'instructorAvatar',
+      title: 'Instructor avatar',
+      description: 'Small square photo shown next to the instructor name.',
+      type: 'image',
+      group: 'catalogue',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'featured',
       type: 'boolean',
       group: 'catalogue',
@@ -140,7 +155,7 @@ export const course = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'category.title', media: 'image' },
+    select: { title: 'title', subtitle: 'instructorName', media: 'image' },
   },
   orderings: [
     {
