@@ -110,7 +110,7 @@ export const course = defineType({
       of: [{ type: 'string' }],
     }),
 
-    // ---- Curriculum (modules -> lessons) ----
+    // ---- Curriculum (modules -> lessons, + quizzes) ----
     defineField({
       name: 'modules',
       type: 'array',
@@ -132,16 +132,31 @@ export const course = defineType({
               of: [defineArrayMember({ type: 'reference', to: [{ type: 'lesson' }] })],
               validation: (r) => r.required().min(1),
             }),
+            defineField({
+              name: 'quiz',
+              title: 'Module quiz',
+              description: 'Optional quiz shown at the end of this module.',
+              type: 'reference',
+              to: [{ type: 'quiz' }],
+            }),
           ],
           preview: {
-            select: { title: 'title', lessons: 'lessons' },
-            prepare: ({ title, lessons }) => ({
+            select: { title: 'title', lessons: 'lessons', quiz: 'quiz.title' },
+            prepare: ({ title, lessons, quiz }) => ({
               title,
-              subtitle: `${lessons?.length ?? 0} lessons`,
+              subtitle: `${lessons?.length ?? 0} lessons${quiz ? ` · Quiz: ${quiz}` : ''}`,
             }),
           },
         }),
       ],
+    }),
+    defineField({
+      name: 'finalQuiz',
+      title: 'Final quiz',
+      description: 'Optional end-of-course quiz.',
+      type: 'reference',
+      to: [{ type: 'quiz' }],
+      group: 'curriculum',
     }),
 
     // ---- Search (Algolia) ----
